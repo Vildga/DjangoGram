@@ -1,0 +1,35 @@
+{#<!DOCTYPE html>#}
+{#<html lang="ru">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Загрузка фотографий</title>#}
+{#</head>#}
+{#<body>#}
+{#  <h1>Загрузка фотографий</h1>#}
+{##}
+{#  <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">#}
+{#    {% csrf_token %}#}
+{#    {{ form }}#}
+{#    <button type="submit">Загрузить</button>#}
+{#  </form>#}
+{#</body>#}
+{#</html>#}
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Нова публікація
+{% endblock %}
+
+{% block content %}
+    <div class="upload-container">
+        <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Завантажити</button>
+        </form>
+    </div>
+{% endblock %}

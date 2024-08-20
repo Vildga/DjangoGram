@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>To whom it is subscribed</h2>
+  <ul>
+    {% for following_user in following_users %}
+      <li>{{ following_user.following_user.username }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

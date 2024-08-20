@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ user.username }}'s Profile
+{% endblock %}
+
+{% block content %}
+<!--    <link rel="stylesheet" href="{% static 'style.css' %}">-->
+
+    <div class="profile-container">
+        <h2>{{ user.username }}'s Profile</h2>
+
+        <p>First Name: {% if user.first_name %}{{ user.first_name }}{% else %}Not provided{% endif %}</p>
+        <p>Last Name: {% if user.last_name %}{{ user.last_name }}{% else %}Not provided{% endif %}</p>
+        <p>Email: {% if user.email %}{{ user.email }}{% else %}Not provided{% endif %}</p>
+
+    </div>
+
+    {% if not is_current_user %}
+        <div class="profile-container">
+            {% if not is_following %}
+                <a href="#" class="follow-button" data-username="{{ user.username }}">Follow</a>
+            {% else %}
+                <a href="#" class="unfollow-button" data-username="{{ user.username }}">Unfollow</a>
+            {% endif %}
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $(".follow-button, .unfollow-button").click(function(e) {
+                    e.preventDefault();
+
+                    var button = $(this);
+                    var username = button.data('username');
+                    var isFollowing = button.hasClass('unfollow-button');
+
+                    var actionUrl = isFollowing ? "/unfollow/" + username + "/" : "/follow/" + username + "/";
+
+                    $.post(actionUrl, { csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
+
+                    if (data.status === 'success') {
+                        if (isFollowing) {
+                            button.text("Follow").removeClass('unfollow-button').addClass('follow-button');
+                        } else {
+                            button.text("Unfollow").removeClass('follow-button').addClass('unfollow-button');
+                        }
+                    } else if (data.status === 'error') {
+                        alert(data.message);
+                    }
+                }).fail(function() {
+                    alert('Помилка під час виконання запиту.');
+                });
+
+                });
+            });
+
+        </script>
+    {% endif %}
+
+
+    <h3>{{ user.username }}'s Posts</h3>
+    {% if user.post_set.all %}
+        <ul>
+            {% for post in user.post_set.all %}
+                <li><a href="{% url 'post_detail' post.id %}">{{ post.description }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts available.</p>
+    {% endif %}
+
+    <a href="{% url 'edit_profile' %}" class="edit-profile-button">Edit Profile</a>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - DjangoGramm{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="center-buttons">
+            <a href="{% url 'recommendations' %}" class="btn btn-recommendations mb-3">Рекомендації</a>
+            <a href="{% url 'subscriptions' %}" class="btn btn-subscriptions mb-3">Підписки</a>
+        </div>
+
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-username">
+                        <p><a href="{% url 'profile' login=post.author_id.username %}">{{ post.author_id.username }}</a></p>
+                    </div>
+                    <img src="{{ post.images.url }}" alt="{{ post.images.name }}" class="card-img-top">
+                    <div class="card-body">
+                        <p class="card-text">
+                            Likes: {{ post.count_likes }}
+                            Dislikes: {{ post.count_dislikes }}
+                        </p>
+                        <span class="description">{{ post.description }}</span>
+                        <div class="actions">
+                            <button data-post-id="{{ post.id }}" class="btn btn-primary like-btn">Like</button>
+                            <button data-post-id="{{ post.id }}" class="btn btn-danger dislike-btn">Dislike</button>
+                        </div>
+                        <p class="card-text">Publication Date: {{ post.publication_date|date:"F j, Y, g:i a" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".like-btn").click(function(e) {
+                e.preventDefault();
+                var post_id = $(this).data('post-id');
+                $.post(`/post/${post_id}/like/`, { csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
+                    if (data.status === 'success') {
+                        var currentLikes = parseInt($("#like-count").text());
+                        $("#like-count").text(currentLikes + 1);
+                    } else if (data.status === 'error') {
+                        alert(data.message);
+                    }
+                });
+            });
+
+            $(".dislike-btn").click(function(e) {
+                e.preventDefault();
+                var post_id = $(this).data('post-id');
+                $.post(`/post/${post_id}/dislike/`, { csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
+                    if (data.status === 'success') {
+                        var currentDislikes = parseInt($("#dislike-count").text());
+                        $("#dislike-count").text(currentDislikes + 1);
+                    } else if (data.status === 'error') {
+                        alert(data.message);
+                    }
+                });
+            });
+        });
+
+    </script>
+{% endblock %}
+

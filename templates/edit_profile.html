@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Edit Profile
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <div class="profile-container">
+        <h2>Edit Profile</h2>
+        <form method="post" action="{% url 'save_profile_changes' %}">
+            {% csrf_token %}
+
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name|default:'Not provided' }}"><br>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name|default:'Not provided' }}"><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email|default:'Not provided' }}"><br>
+
+            <button type="submit" class="button">Save Changes</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - DjangoGramm{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-username">
+                        <p><a href="{% url 'profile' login=post.author_id.username %}">{{ post.author_id.username }}</a></p>
+                    </div>
+                    <img src="{{ post.images.url }}" alt="{{ post.images.name }}" class="card-img-top">
+                    <div class="card-body">
+                        <p class="card-text">
+                            Likes: {{ post.count_likes }}
+                            Dislikes: {{ post.count_dislikes }}
+                        </p>
+                        <span class="description">{{ post.description }}</span>
+                        <div class="actions">
+                            <a href="{% url 'like_post' post_id=post.id %}" class="btn btn-primary">Like</a>
+                            <a href="{% url 'dislike_post' post_id=post.id %}" class="btn btn-danger">Dislike</a>
+                        </div>
+                        <p class="card-text">Publication Date: {{ post.publication_date|date:"F j, Y, g:i a" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

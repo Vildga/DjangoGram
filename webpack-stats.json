@@ -1,0 +1,16 @@
+{
+  "status": "done",
+  "assets": {
+    "main-e40b8bcbe6680506b788.js": {
+      "name": "main-e40b8bcbe6680506b788.js",
+      "path": "C:\\Users\\oleks\\PycharmProjects\\foxminded\\Task15\\assets\\webpack_bundles\\main-e40b8bcbe6680506b788.js",
+      "publicPath": "auto"
+    }
+  },
+  "chunks": {
+    "main": [
+      "main-e40b8bcbe6680506b788.js"
+    ]
+  },
+  "publicPath": "auto"
+}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Post</title>
+</head>
+<body>
+  <h1>Post Details</h1>
+
+  {% if post %}
+      <h2>{{ post.description }}</h2>
+      <h2>{{ post.count_likes }}</h2>
+      <h2>{{ post.count_dislikes }}</h2>
+      <h2>{{ post.publication_date }}</h2>
+  {% else %}
+    <p>No post available.</p>
+  {% endif %}
+</body>
+</html>
